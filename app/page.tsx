@@ -1,42 +1,54 @@
-import { getPlayers, getCurrentSeason } from './actions'
+import Link from "next/link"
+import { getPlayers, getCurrentSeason } from "./actions"
+import ScoreTable from "./ScoreTable"
+import FinalizeButton from "./components/FinalizeButton"
+
+export const dynamic = "force-dynamic"
 
 export default async function Home() {
   const players = await getPlayers()
   const season = await getCurrentSeason()
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-2">
-        シーズン {season?.season_number}
-      </h1>
+    <div className="min-h-screen bg-gray-100 py-10">
+      <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8">
 
-      <p className="mb-4 text-gray-500">
-        {season?.year}年 {season?.month}月
-      </p>
+        {/* ヘッダー */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold">
+            シーズン {season?.season_number}
+          </h1>
 
-      <table className="w-full border">
-        <thead>
-          <tr>
-            <th>名前</th>
-            <th>累計</th>
-            <th>今日</th>
-          </tr>
-        </thead>
-        <tbody>
-          {players.map(p => (
-            <tr key={p.id} className="border-t">
-              <td>{p.name}</td>
-              <td>{p.total_score}</td>
-              <td>
-                <input
-                  type="number"
-                  className="border p-1 w-24"
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <p className="text-gray-500 mt-2">
+            {season?.year}年 {season?.month}月
+          </p>
+        </div>
+
+        {/* スコアテーブル */}
+        <ScoreTable players={players} />
+
+        {/* 下部ボタンエリア */}
+        <div className="flex justify-center gap-4 mt-10 flex-wrap">
+
+          <FinalizeButton />
+
+          <Link
+            href="/history"
+            className="px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition"
+          >
+            過去戦歴
+          </Link>
+
+          <Link
+            href="/logs"
+            className="px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition"
+          >
+            入力履歴
+          </Link>
+
+        </div>
+
+      </div>
     </div>
   )
 }
