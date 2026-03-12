@@ -11,7 +11,6 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-10">
-      <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8">
 
         {/* ヘッダー */}
         <div className="text-center mb-8">
@@ -49,6 +48,5 @@ export default async function Home() {
         </div>
 
       </div>
-    </div>
   )
 }

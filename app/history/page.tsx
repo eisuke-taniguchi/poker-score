@@ -17,6 +17,7 @@ export default async function HistoryPage() {
     `)
     .order("season_id", { ascending: false })
 
+    
     return (
     <div>
         <h1>シーズン履歴</h1>

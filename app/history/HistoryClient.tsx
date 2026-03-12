@@ -73,7 +73,7 @@ export default function HistoryClient({ results }: any) {
 
         {selectedMonth !== "total" &&
           Object.entries(grouped).map(([key, players]: any, seasonIndex) => {
-            const [year, month] = key.split("-")
+            const [year, month] = key.split(":")
 
             return (
               <div

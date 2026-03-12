@@ -3,7 +3,7 @@
 import { useState } from "react"
 
 type Props = {
-  scores: Record<number, number>
+  scores: Record<string, number>
   totalToday: number
 }
 

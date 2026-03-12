@@ -4,19 +4,15 @@ import { useState } from "react"
 import ReflectButton from "./ReflectButton"
 
 type Player = {
-  id: number
+  id: string
   name: string
-  total_score: number
+  score: number   // 今月
+  today: number   // 今日
 }
 
 export default function ScoreTable({ players }: { players: Player[] }) {
-  const [dailyScores, setDailyScores] = useState<Record<number, number>>({})
-  const [deltas, setDeltas] = useState<Record<number, number>>({})
-
-  const totalToday = Object.values(dailyScores).reduce(
-    (sum, value) => sum + (Number(value) || 0),
-    0
-  )
+  const [dailyScores, setDailyScores] = useState<Record<string, number>>({})
+  const [deltas, setDeltas] = useState<Record<string, number>>({})
 
   const updateDaily = (id: number, value: number) => {
     setDailyScores(prev => ({
@@ -25,20 +21,35 @@ export default function ScoreTable({ players }: { players: Player[] }) {
     }))
   }
 
-  const applyDelta = (id: number, sign: 1 | -1) => {
-    const amount = deltas[id] || 0
-    if (!amount) return
+const scores: Record<string, number> = {}
 
-    setDailyScores(prev => ({
-      ...prev,
-      [id]: (prev[id] || 0) + amount * sign
-    }))
+players.forEach(p => {
+  scores[p.id] = p.today
+})
 
-    setDeltas(prev => ({
-      ...prev,
-      [id]: 0
-    }))
-  }
+const totalToday = players.reduce(
+  (sum, p) => sum + p.today,
+  0
+)
+
+const applyDelta = async (id: string, sign: 1 | -1) => {
+
+  const amount = deltas[id] || 0
+  if (!amount) return
+
+  await fetch("/api/updateScore", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      playerId: id,
+      delta: amount * sign
+    })
+  })
+
+  location.reload()
+}
 
   return (
     <>
@@ -58,7 +69,8 @@ export default function ScoreTable({ players }: { players: Player[] }) {
         </thead>
 
         <tbody>
-          {players.map(p => (
+          {[...players]
+            .sort((a, b) => b.score - a.score).map(p => (
             <tr key={p.id} className="hover:bg-gray-50 transition">
               
               {/* 名前（中央） */}
@@ -68,7 +80,7 @@ export default function ScoreTable({ players }: { players: Player[] }) {
 
               {/* 今月（右揃え） */}
               <td className="border border-gray-300 p-3 text-right">
-                {p.total_score}
+                {p.score}
               </td>
 
               {/* 本日 */}
@@ -76,18 +88,8 @@ export default function ScoreTable({ players }: { players: Player[] }) {
   <div className="flex items-center justify-between">
 
     {/* 現在値（左側） */}
-    <span
-      className={`w-20 text-right text-lg font-bold ${
-        (dailyScores[p.id] || 0) > 0
-          ? "text-green-600"
-          : (dailyScores[p.id] || 0) < 0
-          ? "text-red-600"
-          : "text-gray-400"
-      }`}
-    >
-      {(dailyScores[p.id] || 0) > 0
-        ? `+${dailyScores[p.id]}`
-        : dailyScores[p.id] || 0}
+    <span>
+    {p.today > 0 ? `+${p.today}` : p.today}
     </span>
 
     {/* 調整エリア（右側に固定） */}
@@ -109,13 +111,16 @@ export default function ScoreTable({ players }: { players: Player[] }) {
       />
 
       <button
+        type="button"
         className="px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded text-sm"
-        onClick={() => applyDelta(p.id, 1)}
+        onClick={() => {
+            applyDelta(p.id, 1)}}
       >
         ＋
       </button>
 
       <button
+        type="button"
         className="px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm"
         onClick={() => applyDelta(p.id, -1)}
       >
@@ -147,8 +152,8 @@ export default function ScoreTable({ players }: { players: Player[] }) {
         </div>
 
         <ReflectButton
-          scores={dailyScores}
-          totalToday={totalToday}
+        scores={scores}
+        totalToday={totalToday}
         />
       </div>
     </>

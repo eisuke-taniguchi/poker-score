@@ -4,13 +4,45 @@ import { supabase } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
 
 export async function getPlayers() {
-  const { data } = await supabase
-    .from('players')
-    .select('*')
-    .eq('is_active', true)
-    .order('created_at')
 
-  return data ?? []
+  const { data: season } = await supabase
+    .from("seasons")
+    .select("id")
+    .eq("is_current", true)
+    .single()
+
+  if (!season) return []
+
+  const { data, error } = await supabase
+    .from("players")
+    .select(`
+      id,
+      name,
+      score,
+      season_results (
+        score,
+        season_id
+      )
+    `)
+
+  if (error) {
+    console.error(error)
+    return []
+  }
+
+  return (data ?? []).map((p: any) => {
+
+    const result = p.season_results?.find(
+      (r: any) => r.season_id === season.id
+    )
+
+    return {
+      id: p.id,
+      name: p.name,
+      score: result?.score ?? 0,   // ← 今月
+      today: p.score ?? 0          // ← 今日
+    }
+  })
 }
 
 export async function addPlayer(formData: FormData) {
@@ -18,7 +50,7 @@ export async function addPlayer(formData: FormData) {
 
   await supabase.from('players').insert({
     name,
-    total_score: 0
+    score: 0
   })
 
   revalidatePath('/players')
@@ -47,7 +79,7 @@ export async function getCurrentSeason() {
 
 export async function finalizeSeason() {
 
-  // 🔥 現在のシーズン取得
+  // 現在シーズン取得
   const { data: season } = await supabase
     .from("seasons")
     .select("*")
@@ -56,36 +88,7 @@ export async function finalizeSeason() {
 
   if (!season) return
 
-  // 🔥 アクティブプレイヤー取得
-  const { data: players } = await supabase
-    .from("players")
-    .select("*")
-    .eq("is_active", true)
-
-  if (!players || players.length === 0) return
-
-  // 🔥 履歴保存
-  const results = players.map((p) => ({
-    season_id: season.id,
-    player_id: p.id,
-    score: p.total_score
-  }))
-
-  await supabase.from("season_results").insert(results)
-
-  // 🔥 プレイヤーリセット
-  await supabase
-    .from("players")
-    .update({ total_score: 0 })
-    .eq("is_active", true)
-
-  // 🔥 現在シーズン終了
-  await supabase
-    .from("seasons")
-    .update({ is_current: false })
-    .eq("id", season.id)
-
-  // 🔥 次の月計算
+  // 次の月計算
   let newMonth = season.month + 1
   let newYear = season.year
 
@@ -94,13 +97,47 @@ export async function finalizeSeason() {
     newYear += 1
   }
 
-  // 🔥 新シーズン作成
-  await supabase.from("seasons").insert({
-    season_number: season.season_number + 1,
-    year: newYear,
-    month: newMonth,
-    is_current: true
-  })
+  // 新シーズン作成
+  const { data: newSeason } = await supabase
+    .from("seasons")
+    .insert({
+      season_number: season.season_number + 1,
+      year: newYear,
+      month: newMonth,
+      is_current: true
+    })
+    .select()
+    .single()
+
+  // 全プレイヤー取得
+  const { data: players } = await supabase
+    .from("players")
+    .select("id")
+
+  // season_results作成
+  if (players && newSeason) {
+
+    const rows = players.map(p => ({
+      player_id: p.id,
+      season_id: newSeason.id,
+      score: 0
+    }))
+
+    await supabase
+      .from("season_results")
+      .insert(rows)
+  }
+
+  // 今日スコアリセット
+  await supabase
+    .from("players")
+    .update({ score: 0 })
+
+  // 現在シーズン終了
+  await supabase
+    .from("seasons")
+    .update({ is_current: false })
+    .eq("id", season.id)
 
   revalidatePath("/")
 }
@@ -110,18 +147,16 @@ export async function getScoreLogs() {
     .from("score_logs")
     .select(`
       id,
+      player_id,
       amount,
-      created_at,
-      players (
-        name
-      )
+      created_at
     `)
     .order("created_at", { ascending: false })
 
   if (error) {
+    console.error("Supabase error:", error.message)
     console.error(error)
     return []
   }
-
   return data ?? []
 }
