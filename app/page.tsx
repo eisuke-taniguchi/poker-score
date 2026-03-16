@@ -10,7 +10,7 @@ export default async function Home() {
   const season = await getCurrentSeason()
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
+    <div className="min-h-screen w-full bg-gray-100 py-6 px-3">
 
         {/* ヘッダー */}
         <div className="text-center mb-8">

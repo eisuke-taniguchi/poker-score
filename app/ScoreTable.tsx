@@ -53,6 +53,7 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
 
   return (
     <>
+    <div className="overflow-x-auto">
       <table className="w-full border border-gray-300 border-collapse">
         <thead>
           <tr className="bg-gray-100">
@@ -94,8 +95,6 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
 
     {/* 調整エリア（右側に固定） */}
     <div className="flex items-center gap-2 text-sm text-gray-500">
-
-      <span className="text-gray-400">入力欄</span>
 
       <input
         type="number"
@@ -155,6 +154,7 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
         scores={scores}
         totalToday={totalToday}
         />
+      </div>
       </div>
     </>
   )
