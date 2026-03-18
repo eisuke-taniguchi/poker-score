@@ -34,7 +34,7 @@ export default async function LogsPage() {
           {logs.map((log: any) => (
             <tr key={log.id}>
               <td>{new Date(log.created_at).toLocaleString()}</td>
-              <td>{log.players?.name}</td>
+              <td>{log.players.name}</td>
               <td
                 style={{
                   color: log.amount > 0 ? "green" : "red",

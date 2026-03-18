@@ -147,7 +147,9 @@ export async function getScoreLogs() {
     .from("score_logs")
     .select(`
       id,
-      player_id,
+      players (
+        name
+      ),
       amount,
       created_at
     `)
@@ -158,5 +160,6 @@ export async function getScoreLogs() {
     console.error(error)
     return []
   }
+
   return data ?? []
 }

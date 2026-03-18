@@ -12,9 +12,9 @@ export async function POST(req: Request) {
 
   for (const [id, value] of Object.entries(scores)) {
 
-    const { data, error } = await supabase.rpc("reflect_score", {
-      player_id_input: id
-    })
+const { error } = await supabase.rpc("reflect_score", {
+  player_id_input: id
+})
 
   }
 
