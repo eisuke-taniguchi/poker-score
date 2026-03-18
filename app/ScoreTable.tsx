@@ -136,7 +136,7 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
 
       <div className="mt-4 text-center">
         <div className="mb-3 font-bold text-lg">
-          本日合計:{" "}
+          本日のズレ:{" "}
           <span
             className={
               totalToday === 0
