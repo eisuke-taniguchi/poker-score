@@ -65,7 +65,7 @@ export default function HistoryClient({ results }: any) {
               .map(([name, score]: any, index: number) => (
                 <div key={name}>
                   {index === 0 && "👑 "}
-                  {name} - {score}
+                  {name} : {score}
                 </div>
               ))}
           </div>
@@ -87,7 +87,7 @@ export default function HistoryClient({ results }: any) {
                 {players.map((p: any, index: number) => (
                   <div key={p.players.id ?? index}>
                     {index === 0 && "👑 "}
-                    {p.players.name} - {p.score}
+                    {p.players.name} : {p.score}
                   </div>
                 ))}
               </div>
