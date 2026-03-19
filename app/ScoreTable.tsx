@@ -57,13 +57,13 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
       <table className="w-full border border-gray-300 border-collapse">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border border-gray-300 p-2 text-center text-gray-900">
+            <th className="border border-gray-300 p-2 text-center">
               名前
             </th>
-            <th className="border border-gray-300 p-2 text-center text-gray-900">
+            <th className="border border-gray-300 p-2 text-center">
               今月
             </th>
-            <th className="border border-gray-300 p-2 text-center text-gray-900">
+            <th className="border border-gray-300 p-2 text-center">
               本日
             </th>
           </tr>
