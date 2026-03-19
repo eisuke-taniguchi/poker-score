@@ -54,16 +54,16 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
   return (
     <>
     <div className="overflow-x-auto">
-      <table className="w-full border border-gray-300 dark:border-gray-100 border-collapse">
+      <table className="w-full border border-gray-300 border-collapse">
         <thead>
           <tr className="bg-gray-100">
-            <th className="border border-gray-300 dark:border-gray-100 p-2 text-center">
+            <th className="border border-gray-300 p-2 text-center">
               名前
             </th>
-            <th className="border border-gray-300 dark:border-gray-100 p-2 text-center">
+            <th className="border border-gray-300 p-2 text-center">
               今月
             </th>
-            <th className="border border-gray-300 dark:border-gray-100 p-2 text-center">
+            <th className="border border-gray-300 p-2 text-center">
               本日
             </th>
           </tr>
@@ -75,17 +75,17 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
             <tr key={p.id} className="hover:bg-gray-50 transition">
               
               {/* 名前（中央） */}
-              <td className="border border-gray-300 dark:border-gray-100 p-2 text-center">
+              <td className="border border-gray-300 p-2 text-center">
                 {p.name}
               </td>
 
               {/* 今月（右揃え） */}
-              <td className="border border-gray-300 dark:border-gray-100 p-2 text-right">
+              <td className="border border-gray-300 p-2 text-right">
                 {p.score}
               </td>
 
               {/* 本日 */}
-<td className="border border-gray-300 dark:border-gray-100 px-2 py-1">
+<td className="border border-gray-300 px-2 py-1">
   <div className="flex items-center justify-between">
 
     {/* 現在値（左側） */}
@@ -94,11 +94,11 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
     </span>
 
     {/* 調整エリア（右側に固定） */}
-    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-100">
+    <div className="flex items-center gap-2 text-sm text-gray-500">
 
       <input
         type="number"
-        className="border border-gray-300 dark:border-gray-100 rounded px-2 py-1 w-14 text-right"
+        className="border border-gray-300 rounded px-2 py-1 w-14 text-right"
         placeholder="金額"
         value={deltas[p.id] || ""}
         onChange={(e) =>

@@ -10,7 +10,7 @@ export default async function Home() {
   const season = await getCurrentSeason()
 
   return (
-    <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-800 py-6 px-3">
+    <div className="min-h-screen w-full bg-gray-100 py-6 px-3">
 
         {/* ヘッダー */}
         <div className="text-center mb-8">
@@ -18,7 +18,7 @@ export default async function Home() {
             シーズン {season?.season_number}
           </h1>
 
-          <p className="text-gray-500 dark:text-gray-100 mt-2">
+          <p className="text-gray-500 mt-2">
             {season?.year}年 {season?.month}月
           </p>
         </div>
@@ -33,14 +33,14 @@ export default async function Home() {
 
           <Link
             href="/history"
-            className="px-4 py-2 border border-gray-300 dark:border-gray-100 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 transition"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-100 rounded-lg bg-white hover:bg-gray-50 transition"
           >
             過去戦歴
           </Link>
 
           <Link
             href="/logs"
-            className="px-4 py-2 border border-gray-300 dark:border-gray-100 rounded-lg bg-white dark:bg-gray-800 hover:bg-gray-50 transition"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-100 rounded-lg bg-white hover:bg-gray-50 transition"
           >
             入力履歴
           </Link>
