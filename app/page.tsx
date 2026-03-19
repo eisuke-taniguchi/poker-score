@@ -33,14 +33,14 @@ export default async function Home() {
 
           <Link
             href="/history"
-            className="px-4 py-2 border border-gray-300 dark:border-gray-100 rounded-lg bg-white hover:bg-gray-50 transition"
+            className="px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition"
           >
             過去戦歴
           </Link>
 
           <Link
             href="/logs"
-            className="px-4 py-2 border border-gray-300 dark:border-gray-100 rounded-lg bg-white hover:bg-gray-50 transition"
+            className="px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition"
           >
             入力履歴
           </Link>
