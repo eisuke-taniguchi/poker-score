@@ -18,7 +18,7 @@ export default async function Home() {
             シーズン {season?.season_number}
           </h1>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 dark:text-gray-500 mt-2">
             {season?.year}年 {season?.month}月
           </p>
         </div>

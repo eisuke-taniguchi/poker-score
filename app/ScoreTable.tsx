@@ -94,7 +94,7 @@ const applyDelta = async (id: string, sign: 1 | -1) => {
     </span>
 
     {/* 調整エリア（右側に固定） */}
-    <div className="flex items-center gap-2 text-sm text-gray-500">
+    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-500">
 
       <input
         type="number"
